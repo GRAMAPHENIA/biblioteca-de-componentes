@@ -1,0 +1,68 @@
+---
+import type { ButtonVariant, ButtonSize } from '../../types/ui';
+
+export interface Props {
+  label?: string;
+  href?: string;
+  target?: '_self' | '_blank';
+  rel?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  disabled?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  label,
+  href,
+  target = '_self',
+  rel,
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  class: className = '',
+  ariaLabel
+} = Astro.props;
+
+const base =
+  'inline-flex items-center gap-1 rounded-md border transition-all duration-200 ease-out will-change-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text-secondary)]';
+
+const sizeMap: Record<ButtonSize, string> = {
+  sm: 'px-2.5 py-1.5 text-xs',
+  md: 'px-3.5 py-2 text-sm',
+  lg: 'px-4.5 py-2.5 text-base'
+};
+
+const variantMap: Record<ButtonVariant, string> = {
+  primary:
+    'bg-[var(--color-bg-ghost-hover)] text-[var(--color-text-primary)] border-transparent hover:-translate-y-[1px] hover:bg-[var(--color-bg-ghost)] active:translate-y-0',
+  ghost:
+    'bg-transparent text-[var(--color-text-secondary)] border-[var(--color-bg-ghost)] hover:bg-[var(--color-bg-ghost)]/40 active:bg-[var(--color-bg-ghost)]/60',
+  secondary:
+    'bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] border-[var(--color-bg-ghost)] hover:bg-[var(--color-bg-ghost)]'
+};
+
+const cls = `${base} ${sizeMap[size]} ${variantMap[variant]} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}`;
+---
+
+{href ? (
+  <a
+    href={href}
+    target={target}
+    rel={rel}
+    aria-label={ariaLabel ?? label}
+    class={cls}
+  >
+    <slot>{label}</slot>
+  </a>
+) : (
+  <button
+    type="button"
+    aria-label={ariaLabel ?? label}
+    class={cls}
+    disabled={disabled}
+  >
+    <slot>{label}</slot>
+  </button>
+)}

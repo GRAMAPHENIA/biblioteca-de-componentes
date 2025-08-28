@@ -1,0 +1,84 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/common/Section.astro';
+
+// Átomos
+import Button from '../components/atoms/Button.astro';
+import Input from '../components/atoms/Input.astro';
+import Icon from '../components/atoms/Icon.astro';
+
+// Moléculas
+import ProductCard from '../components/molecules/ProductCard.astro';
+
+// Células
+import ProductGrid from '../components/cells/ProductGrid.astro';
+
+import type { Product } from '../types/ui';
+
+const demoProduct: Product = {
+  id: 'prod_001',
+  name: 'Auriculares Minimal',
+  price: 79.99,
+  currency: 'USD',
+  imageUrl: 'https://images.unsplash.com/photo-1518443757700-b1bf38423d49?q=80&w=1200&auto=format&fit=crop',
+  rating: 4,
+  description: 'Audio claro y diseño limpio para un setup minimalista.',
+  tags: ['audio', 'minimal']
+};
+
+const demoProducts: Product[] = [
+  demoProduct,
+  {
+    id: 'prod_002',
+    name: 'Teclado Mecánico',
+    price: 119.0,
+    currency: 'USD',
+    imageUrl: 'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop',
+    rating: 5,
+    description: 'Tacto preciso y estética sobria.',
+  },
+  {
+    id: 'prod_003',
+    name: 'Mouse Inalámbrico',
+    price: 49.9,
+    currency: 'USD',
+    imageUrl: 'https://images.unsplash.com/photo-1612198182911-3b8d9400ff18?q=80&w=1200&auto=format&fit=crop',
+    rating: 4,
+    description: 'Ligero, ergonómico y con batería de larga duración.',
+  }
+];
+---
+
+<Layout title="Componentes UI">
+  <main class="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)]">
+    <Section
+      title="Átomos"
+      description="Componentes básicos reutilizables con tipado fuerte y micro animaciones."
+    >
+      <div class="flex flex-wrap items-center gap-3">
+        <Button variant="primary" size="sm">Primario SM</Button>
+        <Button variant="primary" size="md">Primario MD</Button>
+        <Button variant="ghost" size="md">
+          <Icon name="arrow-right" class="opacity-80" /> Ghost
+        </Button>
+        <Input placeholder="Buscar producto..." />
+      </div>
+    </Section>
+
+    <Section
+      title="Moléculas"
+      description="Combinaciones de átomos, como cards, navbars o modales."
+    >
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ProductCard product={demoProduct} />
+      </div>
+    </Section>
+
+    <Section
+      title="Células"
+      description="Agrupan múltiples moléculas en estructuras más complejas."
+    >
+      <ProductGrid products={demoProducts} />
+    </Section>
+  </main>
+</Layout>

@@ -1,0 +1,66 @@
+---
+import type { Product } from "../../types/ui";
+import Icon from "../atoms/Icon.astro";
+import Button from "../atoms/Button.astro";
+
+export interface Props {
+  product: Product;
+  onAddToCartUrl?: string; // opcional: navegación a acción
+  ctaLabel?: string;
+}
+
+const { product, onAddToCartUrl, ctaLabel = "Agregar" } = Astro.props;
+
+const currency = product.currency ?? "USD";
+
+const priceFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency,
+});
+---
+
+<article
+  class="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--color-bg-ghost)] bg-[var(--color-bg-secondary)] transition-transform duration-200 ease-out will-change-transform"
+>
+  <div class="relative aspect-[4/3] overflow-hidden">
+    <img
+      src={product.imageUrl}
+      alt={`Imagen de ${product.name}`}
+      loading="lazy"
+      class="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+    />
+  </div>
+
+  <div class="flex flex-1 flex-col gap-2 p-3">
+    <header class="flex items-start justify-between gap-2">
+      <h3 class="text-sm font-medium text-[var(--color-text-primary)]">
+        {product.name}
+      </h3>
+    </header>
+
+    {
+      product.description && (
+        <p class="line-clamp-2 text-xs text-[var(--color-text-secondary)]">
+          {product.description}
+        </p>
+      )
+    }
+
+    <div class="mt-auto flex items-center justify-between">
+      <span class="text-sm font-semibold text-[var(--color-text-primary)]">
+        {priceFormatter.format(product.price)}
+      </span>
+
+      <Button
+        variant="ghost"
+        size="sm"
+        href={onAddToCartUrl}
+        ariaLabel={`Agregar ${product.name} al carrito`}
+        class="gap-1"
+      >
+        <Icon name="cart" size={14} class="opacity-80" />
+        <span>{ctaLabel}</span>
+      </Button>
+    </div>
+  </div>
+</article>

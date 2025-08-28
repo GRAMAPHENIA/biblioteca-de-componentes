@@ -1,0 +1,17 @@
+---
+import type { Product } from '../../types/ui';
+import ProductCard from '../molecules/ProductCard.astro';
+
+export interface Props {
+  products: Product[];
+  onAddToCartBaseUrl?: string; // e.g. /cart/add?id=
+}
+
+const { products, onAddToCartBaseUrl = '/cart/add?id=' } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {products.map((p) => (
+    <ProductCard product={p} onAddToCartUrl={`${onAddToCartBaseUrl}${encodeURIComponent(p.id)}`} />
+  ))}
+</div>

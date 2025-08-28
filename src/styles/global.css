@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark theme (default) */
+  --color-bg-primary: hsl(200, 38%, 3%);
+  --color-bg-secondary: hsl(200, 38%, 10%);
+  --color-bg-ghost: hsl(200, 38%, 15%);
+  --color-bg-ghost-hover: hsl(200, 38%, 20%);
+  --color-text-primary: hsl(0, 0%, 100%);
+  --color-text-secondary: hsl(0, 0%, 80%);
+}
+
+/* Light theme */
+.light-theme {
+  --color-bg-primary: hsl(0, 0%, 100%);
+  --color-bg-secondary: hsl(0, 0%, 95%);
+  --color-bg-ghost: hsl(0, 0%, 90%);
+  --color-bg-ghost-hover: hsl(0, 0%, 85%);
+  --color-text-primary: hsl(200, 38%, 3%);
+  --color-text-secondary: hsl(200, 38%, 20%);
+}
+
+/* Apply theme colors */
+body {
+  @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)];
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Utility classes for the theme colors */
+.bg-primary { @apply bg-[var(--color-bg-primary)]; }
+.bg-secondary { @apply bg-[var(--color-bg-secondary)]; }
+.bg-ghost { @apply bg-[var(--color-bg-ghost)]; }
+.bg-ghost-hover { @apply bg-[var(--color-bg-ghost-hover)]; }
+.text-primary { @apply text-[var(--color-text-primary)]; }
+.text-secondary { @apply text-[var(--color-text-secondary)]; }
