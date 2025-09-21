@@ -1,0 +1,350 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/common/Section.astro';
+import Button from '../components/atoms/Button.astro';
+import Icon from '../components/atoms/Icon.astro';
+import { testimonials, caseStudies, getAverageRating } from '../data/testimonials';
+import { companyStats } from '../data/company';
+
+// Meta tags para SEO
+const pageTitle = 'Testimonios y Casos de Éxito - Transaesthetic Dashboard';
+const pageDescription = 'Descubre lo que nuestros clientes dicen sobre nuestros servicios. Casos de éxito reales y testimonios que demuestran nuestro compromiso con la excelencia.';
+---
+
+<Layout>
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="testimonios, casos de éxito, clientes, satisfacción, reviews, experiencias, transaesthetic" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="canonical" href={`${Astro.site}testimonios`} />
+  </head>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Testimonios y <span class="text-blue-600">Casos de Éxito</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        El éxito de nuestros clientes es nuestro mayor logro. Descubre lo que dicen sobre su experiencia trabajando con nosotros.
+      </p>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4">
+          <div class="text-2xl md:text-3xl font-bold text-blue-600 mb-1">
+            {getAverageRating()}
+          </div>
+          <div class="text-sm text-gray-600">Calificación Promedio</div>
+          <div class="flex justify-center mt-1">
+            {[...Array(5)].map((_, i) => (
+              <Icon
+                name="star"
+                size={16}
+                class={`${
+                  i < Math.floor(getAverageRating())
+                    ? 'text-yellow-400'
+                    : 'text-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4">
+          <div class="text-2xl md:text-3xl font-bold text-blue-600 mb-1">
+            {companyStats.satisfaction}%
+          </div>
+          <div class="text-sm text-gray-600">Satisfacción Cliente</div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4">
+          <div class="text-2xl md:text-3xl font-bold text-blue-600 mb-1">
+            {testimonials.length}+
+          </div>
+          <div class="text-sm text-gray-600">Testimonios</div>
+        </div>
+
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4">
+          <div class="text-2xl md:text-3xl font-bold text-blue-600 mb-1">
+            {caseStudies.length}
+          </div>
+          <div class="text-sm text-gray-600">Casos de Estudio</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Testimonials -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Lo que dicen nuestros clientes
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Testimonios reales de empresas que han transformado su negocio con nuestras soluciones
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {testimonials.map(testimonial => (
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+          <!-- Rating -->
+          <div class="flex items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Icon
+                name="star"
+                size={16}
+                class={`${
+                  i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
+                }`}
+              />
+            ))}
+          </div>
+
+          <!-- Testimonial Content -->
+          <blockquote class="text-gray-700 mb-6 leading-relaxed">
+            "{testimonial.content}"
+          </blockquote>
+
+          <!-- Client Info -->
+          <div class="border-t border-gray-100 pt-4">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-full flex items-center justify-center flex-shrink-0">
+                <Icon name="user" size={20} class="text-blue-600" />
+              </div>
+              <div>
+                <div class="font-semibold text-gray-900">
+                  {testimonial.clientName}
+                </div>
+                <div class="text-sm text-gray-600">
+                  {testimonial.clientPosition}
+                </div>
+                <div class="text-sm text-blue-600 font-medium">
+                  {testimonial.clientCompany}
+                </div>
+              </div>
+            </div>
+
+            <!-- Service Used -->
+            <div class="mt-3">
+              <span class="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded-full">
+                {testimonial.serviceUsed}
+              </span>
+            </div>
+
+            <!-- Results -->
+            {testimonial.results && testimonial.results.length > 0 && (
+              <div class="mt-4 space-y-2">
+                <div class="text-sm font-medium text-gray-900">Resultados:</div>
+                {testimonial.results.map(result => (
+                  <div class="text-sm text-gray-600">
+                    <span class="font-medium">{result.metric}:</span> {result.value}
+                    <span class="text-green-600 ml-1">({result.improvement})</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Case Studies -->
+  <Section className="bg-gray-50 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Casos de Estudio Destacados
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Historias detalladas de transformación digital y éxito empresarial
+      </p>
+    </div>
+
+    <div class="space-y-12">
+      {caseStudies.map((caseStudy, index) => (
+        <div class={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${
+          index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
+        }`}>
+          <!-- Content -->
+          <div class={index % 2 === 1 ? 'lg:col-start-2' : ''}>
+            <div class="mb-4">
+              <span class="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                {caseStudy.industry}
+              </span>
+            </div>
+
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              {caseStudy.title}
+            </h3>
+
+            <div class="space-y-4 text-gray-600 mb-6">
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">El Desafío</h4>
+                <p>{caseStudy.challenge}</p>
+              </div>
+
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">La Solución</h4>
+                <p>{caseStudy.solution}</p>
+              </div>
+            </div>
+
+            <!-- Technologies -->
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-900 mb-3">Tecnologías Utilizadas</h4>
+              <div class="flex flex-wrap gap-2">
+                {caseStudy.technologies.map(tech => (
+                  <span class="bg-gray-200 text-gray-700 text-sm px-3 py-1 rounded-full">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Results -->
+            <div class="mb-6">
+              <h4 class="font-semibold text-gray-900 mb-3">Resultados Obtenidos</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {caseStudy.results.map(result => (
+                  <div class="bg-white rounded-lg p-4 border border-gray-200">
+                    <div class="text-lg font-bold text-green-600">
+                      {result.improvement}
+                    </div>
+                    <div class="text-sm text-gray-600">
+                      {result.metric}
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">
+                      {result.before} → {result.after}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <!-- Testimonial -->
+            <blockquote class="bg-blue-50 border-l-4 border-blue-500 p-4 italic text-gray-700 mb-6">
+              "{caseStudy.testimonial}"
+            </blockquote>
+
+            <div class="text-sm text-gray-500">
+              <Icon name="clock" size={16} class="inline mr-1" />
+              Duración del proyecto: {caseStudy.duration}
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class={`bg-gradient-to-br from-blue-100 to-indigo-200 rounded-xl p-8 flex items-center justify-center ${
+            index % 2 === 1 ? 'lg:col-start-1' : ''
+          }`}>
+            <div class="text-center">
+              <Icon name="bar-chart" size={64} class="text-blue-600 mb-4" />
+              <div class="text-blue-800 font-semibold">
+                {caseStudy.client}
+              </div>
+              <div class="text-blue-600 text-sm">
+                Caso de Estudio
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Client Logos Section -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Empresas que Confían en Nosotros
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Más de {companyStats.clients} empresas han elegido Transaesthetic para su transformación digital
+      </p>
+    </div>
+
+    <!-- Placeholder for client logos -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center opacity-60">
+      {testimonials.slice(0, 6).map(testimonial => (
+        <div class="bg-gray-100 rounded-lg p-4 flex items-center justify-center">
+          <div class="text-center">
+            <div class="w-12 h-12 bg-gray-300 rounded mx-auto mb-2"></div>
+            <div class="text-xs text-gray-600 font-medium">
+              {testimonial.clientCompany}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center mt-8">
+      <p class="text-gray-500 text-sm">
+        Y muchas más empresas que prefieren mantener su privacidad
+      </p>
+    </div>
+  </Section>
+
+  <!-- CTA Section -->
+  <Section className="bg-blue-600 text-white py-16">
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        ¿Listo para ser nuestro próximo caso de éxito?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Únete a nuestros clientes satisfechos y transforma tu negocio con nuestras soluciones profesionales.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button
+          variant="ghost"
+          href="/contacto"
+          className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+        >
+          <Icon name="message-circle" size={16} />
+          Comenzar mi Proyecto
+        </Button>
+        <Button
+          variant="ghost"
+          href="/servicios"
+          className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+        >
+          <Icon name="info" size={16} />
+          Ver Servicios
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Transaesthetic Solutions",
+    "review": testimonials.map(testimonial => ({
+      "@type": "Review",
+      "author": {
+        "@type": "Person",
+        "name": testimonial.clientName
+      },
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": testimonial.rating,
+        "bestRating": 5
+      },
+      "reviewBody": testimonial.content,
+      "datePublished": testimonial.projectDate
+    })),
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": getAverageRating(),
+      "reviewCount": testimonials.length,
+      "bestRating": 5
+    }
+  })} />
+</Layout>

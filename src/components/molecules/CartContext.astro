@@ -1,0 +1,174 @@
+---
+// Cart Context Component - Provides cart state management
+---
+
+<!-- Client-side cart functionality -->
+<script is:inline>
+  // Cart state
+  let cartItems = [];
+  let cartTotal = 0;
+  let cartTotalItems = 0;
+  let cartIsOpen = false;
+
+  // Load cart from localStorage
+  function loadCartFromStorage() {
+    try {
+      const stored = localStorage.getItem('transaesthetic-cart');
+      if (stored) {
+        const cartData = JSON.parse(stored);
+        cartItems = cartData.items || [];
+        cartTotal = cartData.total || 0;
+        cartTotalItems = cartData.totalItems || 0;
+      }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      cartItems = [];
+      cartTotal = 0;
+      cartTotalItems = 0;
+    }
+    updateCartDisplay();
+  }
+
+  // Save cart to localStorage
+  function saveCartToStorage() {
+    try {
+      localStorage.setItem('transaesthetic-cart', JSON.stringify({
+        items: cartItems,
+        total: cartTotal,
+        totalItems: cartTotalItems
+      }));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
+  }
+
+  // Update cart totals
+  function updateCartTotals() {
+    cartTotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    // Dispatch custom event for cart updates
+    window.dispatchEvent(new CustomEvent('cartUpdated', {
+      detail: {
+        items: cartItems,
+        total: cartTotal,
+        totalItems: cartTotalItems,
+        isOpen: cartIsOpen
+      }
+    }));
+
+    saveCartToStorage();
+  }
+
+  // Add item to cart
+  function addToCart(item) {
+    const existingItem = cartItems.find(i => i.id === item.id);
+
+    if (existingItem) {
+      existingItem.quantity += item.quantity || 1;
+    } else {
+      cartItems.push({
+        ...item,
+        quantity: item.quantity || 1
+      });
+    }
+
+    updateCartTotals();
+  }
+
+  // Remove item from cart
+  function removeFromCart(id) {
+    cartItems = cartItems.filter(item => item.id !== id);
+    updateCartTotals();
+  }
+
+  // Update item quantity
+  function updateCartQuantity(id, quantity) {
+    if (quantity <= 0) {
+      removeFromCart(id);
+      return;
+    }
+
+    const item = cartItems.find(i => i.id === id);
+    if (item) {
+      item.quantity = quantity;
+      updateCartTotals();
+    }
+  }
+
+  // Clear cart
+  function clearCart() {
+    cartItems = [];
+    updateCartTotals();
+  }
+
+  // Toggle cart visibility
+  function toggleCart() {
+    cartIsOpen = !cartIsOpen;
+    window.dispatchEvent(new CustomEvent('cartToggled', {
+      detail: { isOpen: cartIsOpen }
+    }));
+  }
+
+  // Open cart
+  function openCart() {
+    cartIsOpen = true;
+    window.dispatchEvent(new CustomEvent('cartToggled', {
+      detail: { isOpen: cartIsOpen }
+    }));
+  }
+
+  // Close cart
+  function closeCart() {
+    cartIsOpen = false;
+    window.dispatchEvent(new CustomEvent('cartToggled', {
+      detail: { isOpen: cartIsOpen }
+    }));
+  }
+
+  // Update cart display (for any UI components that need to show cart state)
+  function updateCartDisplay() {
+    // Dispatch event for UI updates
+    window.dispatchEvent(new CustomEvent('cartDisplayUpdated', {
+      detail: {
+        items: cartItems,
+        total: cartTotal,
+        totalItems: cartTotalItems,
+        isOpen: cartIsOpen
+      }
+    }));
+  }
+
+  // Initialize cart
+  loadCartFromStorage();
+
+  // Listen for add to cart events
+  window.addEventListener('addToCart', (event) => {
+    const detail = event.detail;
+    if (detail && detail.item) {
+      addToCart(detail.item);
+    }
+  });
+
+  // Make functions globally available
+  window.addToCart = addToCart;
+  window.removeFromCart = removeFromCart;
+  window.updateCartQuantity = updateCartQuantity;
+  window.clearCart = clearCart;
+  window.toggleCart = toggleCart;
+  window.openCart = openCart;
+  window.closeCart = closeCart;
+
+  // Expose cart state for debugging
+  window.getCartState = () => ({
+    items: cartItems,
+    total: cartTotal,
+    totalItems: cartTotalItems,
+    isOpen: cartIsOpen
+  });
+</script>
+
+<!-- Cart context provider -->
+<div id="cart-context">
+  <slot />
+</div>

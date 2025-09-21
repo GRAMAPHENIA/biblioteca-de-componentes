@@ -1,0 +1,489 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/common/Section.astro';
+import Button from '../components/atoms/Button.astro';
+import Icon from '../components/atoms/Icon.astro';
+import { services } from '../data/services';
+import { companyInfo } from '../data/company';
+
+// Pricing plans
+const pricingPlans = [
+  {
+    id: 'starter',
+    name: 'Starter',
+    description: 'Perfecto para proyectos pequeños y startups',
+    price: 999,
+    currency: 'USD',
+    period: 'proyecto',
+    popular: false,
+    features: [
+      'Hasta 5 páginas',
+      'Diseño responsivo',
+      'Optimización SEO básica',
+      '2 rondas de revisiones',
+      'Soporte por email',
+      'Entrega en 2 semanas',
+      'Garantía de 3 meses'
+    ],
+    limitations: [
+      'Sin CMS',
+      'Sin e-commerce',
+      'Sin blog'
+    ]
+  },
+  {
+    id: 'professional',
+    name: 'Professional',
+    description: 'La opción más popular para empresas en crecimiento',
+    price: 2999,
+    currency: 'USD',
+    period: 'proyecto',
+    popular: true,
+    features: [
+      'Hasta 15 páginas',
+      'Diseño responsivo premium',
+      'SEO avanzado',
+      'CMS incluido',
+      '5 rondas de revisiones',
+      'Soporte prioritario',
+      'Mantenimiento 6 meses',
+      'Analíticas integradas',
+      'Blog incluido',
+      'Garantía de 12 meses'
+    ],
+    limitations: [
+      'Sin funcionalidades avanzadas',
+      'Sin integración ERP'
+    ]
+  },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    description: 'Solución completa para grandes empresas',
+    price: 7999,
+    currency: 'USD',
+    period: 'proyecto',
+    popular: false,
+    features: [
+      'Páginas ilimitadas',
+      'Diseño exclusivo',
+      'SEO premium',
+      'CMS avanzado',
+      'Revisiones ilimitadas',
+      'Soporte 24/7',
+      'Mantenimiento 12 meses',
+      'E-commerce completo',
+      'Integraciones API',
+      'Sistema de usuarios',
+      'Panel administrativo',
+      'Garantía de 24 meses'
+    ],
+    limitations: []
+  }
+];
+
+// Service packages
+const servicePackages = [
+  {
+    id: 'consultoria-completa',
+    name: 'Consultoría Completa',
+    description: 'Paquete integral de consultoría estratégica',
+    services: [
+      'consultoria-estrategica',
+      'auditoria-seguridad'
+    ],
+    price: 4499,
+    currency: 'USD',
+    duration: '2 meses',
+    savings: 200
+  },
+  {
+    id: 'desarrollo-diseno',
+    name: 'Desarrollo + Diseño',
+    description: 'Paquete combinado de desarrollo y diseño',
+    services: [
+      'desarrollo-web-fullstack',
+      'ui-ux-design-system'
+    ],
+    price: 6499,
+    currency: 'USD',
+    duration: '8 semanas',
+    savings: 300
+  },
+  {
+    id: 'marketing-full',
+    name: 'Marketing Digital Full',
+    description: 'Estrategia completa de marketing digital',
+    services: [
+      'marketing-digital-360',
+      'branding-corporativo'
+    ],
+    price: 4999,
+    currency: 'USD',
+    duration: '3 meses',
+    savings: 200
+  }
+];
+
+// Meta tags para SEO
+const pageTitle = 'Planes y Precios - Transaesthetic Dashboard';
+const pageDescription = 'Descubre nuestros planes de precios transparentes y flexibles. Desde proyectos starter hasta soluciones enterprise completas.';
+---
+
+<Layout>
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="precios, planes, presupuesto, servicios, consultoría, desarrollo, diseño, marketing" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="canonical" href={`${Astro.site}precios`} />
+  </head>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Planes y <span class="text-blue-600">Precios</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        Precios transparentes y flexibles diseñados para adaptarse a tu presupuesto y necesidades
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4 text-left">
+          <div class="flex items-center gap-3">
+            <Icon name="check-circle" size={24} class="text-green-600" />
+            <div>
+              <div class="font-semibold text-gray-900">Sin costos ocultos</div>
+              <div class="text-sm text-gray-600">Lo que ves es lo que pagas</div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4 text-left">
+          <div class="flex items-center gap-3">
+            <Icon name="clock" size={24} class="text-blue-600" />
+            <div>
+              <div class="font-semibold text-gray-900">Entrega garantizada</div>
+              <div class="text-sm text-gray-600">Cumplimos con los plazos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Plans -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Planes de Desarrollo Web
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Elige el plan que mejor se adapte a tu proyecto y presupuesto
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      {pricingPlans.map(plan => (
+        <div class={`relative bg-white rounded-2xl shadow-sm border-2 ${
+          plan.popular ? 'border-blue-500 shadow-lg' : 'border-gray-200'
+        } p-8`}>
+          {plan.popular && (
+            <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                Más Popular
+              </span>
+            </div>
+          )}
+
+          <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">
+              {plan.name}
+            </h3>
+            <p class="text-gray-600 mb-4">
+              {plan.description}
+            </p>
+            <div class="mb-4">
+              <span class="text-4xl font-bold text-gray-900">
+                ${plan.price.toLocaleString()}
+              </span>
+              <span class="text-gray-600"> {plan.currency}</span>
+              <div class="text-sm text-gray-500">
+                por {plan.period}
+              </div>
+            </div>
+          </div>
+
+          <ul class="space-y-3 mb-8">
+            {plan.features.map(feature => (
+              <li class="flex items-start gap-3">
+                <Icon name="check" size={20} class="text-green-500 mt-0.5 flex-shrink-0" />
+                <span class="text-gray-700">{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          {plan.limitations.length > 0 && (
+            <div class="mb-8">
+              <div class="text-sm text-gray-500 mb-2">No incluye:</div>
+              <ul class="space-y-1">
+                {plan.limitations.map(limitation => (
+                  <li class="flex items-start gap-3">
+                    <Icon name="x" size={16} class="text-gray-400 mt-0.5 flex-shrink-0" />
+                    <span class="text-sm text-gray-500">{limitation}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <Button
+            variant={plan.popular ? "primary" : "ghost"}
+            className="w-full justify-center"
+            href={`/contacto?plan=${plan.id}`}
+          >
+            {plan.popular ? 'Comenzar Ahora' : 'Cotizar Plan'}
+          </Button>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Service Packages -->
+  <Section className="bg-gray-50 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Paquetes Combinados
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Ahorra hasta un 20% con nuestros paquetes de servicios combinados
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      {servicePackages.map(pkg => {
+        const packageServices = services.filter(s => pkg.services.includes(s.id));
+        return (
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 relative">
+            <div class="absolute -top-4 right-4">
+              <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                Ahorra ${pkg.savings}
+              </span>
+            </div>
+
+            <div class="text-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900 mb-2">
+                {pkg.name}
+              </h3>
+              <p class="text-gray-600 mb-4">
+                {pkg.description}
+              </p>
+              <div class="mb-4">
+                <span class="text-3xl font-bold text-gray-900">
+                  ${pkg.price.toLocaleString()}
+                </span>
+                <span class="text-gray-600"> {pkg.currency}</span>
+                <div class="text-sm text-gray-500">
+                  por {pkg.duration}
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <div class="text-sm font-medium text-gray-900 mb-3">Incluye:</div>
+              <div class="space-y-2">
+                {packageServices.map(service => (
+                  <div class="flex items-start gap-3">
+                    <Icon name="check" size={16} class="text-green-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <div class="text-sm font-medium text-gray-900">
+                        {service.name}
+                      </div>
+                      <div class="text-xs text-gray-500">
+                        ${service.price.toLocaleString()} USD
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Button
+              variant="primary"
+              className="w-full justify-center"
+              href={`/contacto?paquete=${pkg.id}`}
+            >
+              Solicitar Paquete
+            </Button>
+          </div>
+        );
+      })}
+    </div>
+  </Section>
+
+  <!-- Custom Solutions -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        ¿Necesitas algo personalizado?
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        No todos los proyectos encajan en un molde. Hablemos sobre tu caso específico.
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="bg-blue-50 rounded-xl p-6">
+          <Icon name="settings" size={32} class="text-blue-600 mb-4" />
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Soluciones a Medida
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Adaptamos nuestros servicios a tus necesidades específicas,
+            sin importar cuán complejo sea tu proyecto.
+          </p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li>• Integraciones personalizadas</li>
+            <li>• Funcionalidades específicas</li>
+            <li>• Escalabilidad empresarial</li>
+            <li>• Soporte técnico continuo</li>
+          </ul>
+        </div>
+
+        <div class="bg-green-50 rounded-xl p-6">
+          <Icon name="calculator" size={32} class="text-green-600 mb-4" />
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">
+            Presupuesto Flexible
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Trabajamos contigo para encontrar la solución que mejor
+            se adapte a tu presupuesto y objetivos.
+          </p>
+          <ul class="space-y-2 text-sm text-gray-600">
+            <li>• Pagos en etapas</li>
+            <li>• Presupuestos ajustables</li>
+            <li>• ROI garantizado</li>
+            <li>• Mantenimiento incluido</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <Button
+          variant="primary"
+          href="/contacto?tipo=custom"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="message-circle" size={16} />
+          Solicitar Presupuesto Personalizado
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- FAQ Section -->
+  <Section className="bg-gray-50 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Preguntas Frecuentes sobre Precios
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Resolvemos las dudas más comunes sobre nuestros planes y precios
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-6">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Los precios incluyen mantenimiento?
+        </h3>
+        <p class="text-gray-600">
+          Sí, todos nuestros planes incluyen períodos de garantía y mantenimiento.
+          El plan Professional incluye 6 meses y Enterprise incluye 12 meses de mantenimiento completo.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Puedo cambiar de plan durante el proyecto?
+        </h3>
+        <p class="text-gray-600">
+          Absolutamente. Puedes hacer upgrade de tu plan en cualquier momento.
+          Solo pagarás la diferencia y se ajustarán las funcionalidades según el nuevo plan.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Ofrecen garantías de satisfacción?
+        </h3>
+        <p class="text-gray-600">
+          Sí, ofrecemos garantía de satisfacción en todos nuestros proyectos.
+          Si no estás conforme con el resultado, trabajaremos contigo hasta que lo estés.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Cómo funciona el pago?
+        </h3>
+        <p class="text-gray-600">
+          Generalmente trabajamos con un 50% de anticipo y el 50% restante al finalizar el proyecto.
+          Para proyectos más grandes, podemos dividir los pagos en más etapas.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA Section -->
+  <Section className="bg-blue-600 text-white py-16">
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        ¿Listo para comenzar tu proyecto?
+      </h2>
+      <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+        Agenda una consulta gratuita y recibe una propuesta personalizada sin compromiso.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button
+          variant="ghost"
+          href="/contacto"
+          className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+        >
+          <Icon name="calendar" size={16} />
+          Agendar Consulta Gratuita
+        </Button>
+        <Button
+          variant="ghost"
+          href="/servicios"
+          className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+        >
+          <Icon name="info" size={16} />
+          Ver Todos los Servicios
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "PriceSpecification",
+    "name": "Planes de Precios - Transaesthetic",
+    "description": pageDescription,
+    "offers": pricingPlans.map(plan => ({
+      "@type": "Offer",
+      "name": plan.name,
+      "description": plan.description,
+      "price": plan.price,
+      "priceCurrency": plan.currency,
+      "availability": "https://schema.org/InStock",
+      "priceValidUntil": new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    }))
+  })} />
+</Layout>

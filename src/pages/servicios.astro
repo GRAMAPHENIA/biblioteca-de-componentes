@@ -1,0 +1,243 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/molecules/ProductCard.astro';
+import Section from '../components/common/Section.astro';
+import Button from '../components/atoms/Button.astro';
+import Icon from '../components/atoms/Icon.astro';
+import Breadcrumbs from '../components/common/Breadcrumbs.astro';
+import { services, getServicesByCategory } from '../data/services';
+import { categories } from '../data/categories';
+
+export interface Props {
+  search?: string;
+  category?: string;
+}
+
+const { search, category } = Astro.props;
+
+// Filtrar servicios basado en búsqueda y categoría
+let filteredServices = services;
+
+if (search) {
+  const searchLower = search.toLowerCase();
+  filteredServices = services.filter(service =>
+    service.name.toLowerCase().includes(searchLower) ||
+    service.description.toLowerCase().includes(searchLower) ||
+    service.tags.some(tag => tag.toLowerCase().includes(searchLower))
+  );
+}
+
+if (category && category !== 'todos') {
+  filteredServices = getServicesByCategory(category as any);
+}
+
+// Meta tags para SEO
+const pageTitle = 'Servicios Profesionales - Transaesthetic Dashboard';
+const pageDescription = 'Descubre nuestra gama completa de servicios profesionales: consultoría estratégica, desarrollo web, diseño UI/UX, marketing digital y auditorías de seguridad.';
+---
+
+<Layout>
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="servicios profesionales, consultoría, desarrollo web, diseño UI/UX, marketing digital, auditoría seguridad" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="canonical" href={`${Astro.site}servicios`} />
+  </head>
+
+  <!-- Breadcrumbs -->
+  <Section className="py-4 border-b bg-gray-50">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs
+        items={[
+          { label: "Servicios", href: "/servicios", current: true }
+        ]}
+      />
+    </div>
+  </Section>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Nuestros <span class="text-blue-600">Servicios</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        Soluciones profesionales diseñadas para impulsar tu negocio hacia el éxito digital
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-md mx-auto mb-8">
+        <form method="GET" class="relative">
+          <input
+            type="text"
+            name="search"
+            value={search || ''}
+            placeholder="Buscar servicios..."
+            class="w-full px-4 py-3 pr-12 text-lg border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            aria-label="Buscar servicios"
+          />
+          <button
+            type="submit"
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600 transition-colors"
+            aria-label="Buscar"
+          >
+            <Icon name="search" size={20} />
+          </button>
+        </form>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <a
+          href="/servicios"
+          class={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+            !category || category === 'todos'
+              ? 'bg-blue-600 text-white'
+              : 'bg-white text-gray-600 hover:bg-gray-50'
+          }`}
+        >
+          Todos los Servicios
+        </a>
+        {categories.map(cat => (
+          <a
+            href={`/servicios?category=${cat.id}`}
+            class={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              category === cat.id
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            <Icon name={cat.icon} size={16} class="inline mr-2" />
+            {cat.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Grid -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        {category && category !== 'todos'
+          ? categories.find(c => c.id === category)?.name
+          : 'Todos Nuestros Servicios'
+        }
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        {filteredServices.length} servicio{filteredServices.length !== 1 ? 's' : ''} disponible{filteredServices.length !== 1 ? 's' : ''}
+        {search && ` para "${search}"`}
+      </p>
+    </div>
+
+    {filteredServices.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredServices.map(service => (
+          <ProductCard
+            product={{
+              id: service.id,
+              name: service.name,
+              description: service.description,
+              price: service.price,
+              currency: service.currency,
+              imageUrl: service.imageUrl,
+              rating: service.rating,
+              tags: service.tags
+            }}
+            showAddToCart={true}
+            ctaLabel="Agregar al carrito"
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <Icon name="search" size={64} class="mx-auto text-gray-300 mb-4" />
+        <h3 class="text-2xl font-semibold text-gray-900 mb-2">
+          No se encontraron servicios
+        </h3>
+        <p class="text-gray-600 mb-6">
+          {search
+            ? `No hay servicios que coincidan con tu búsqueda "${search}"`
+            : 'No hay servicios disponibles en esta categoría'
+          }
+        </p>
+        <Button
+          variant="primary"
+          href="/servicios"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="arrow-left" size={16} />
+          Ver todos los servicios
+        </Button>
+      </div>
+    )}
+  </Section>
+
+  <!-- CTA Section -->
+  <Section className="bg-gray-900 text-white py-16">
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        ¿No encuentras lo que buscas?
+      </h2>
+      <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+        Ofrecemos soluciones personalizadas para necesidades específicas.
+        Hablemos sobre tu proyecto.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button
+          variant="primary"
+          href="/contacto"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="message-circle" size={16} />
+          Solicitar Consulta Gratuita
+        </Button>
+        <Button
+          variant="ghost"
+          href="/precios"
+          className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-gray-900"
+        >
+          <Icon name="info" size={16} />
+          Ver Planes y Precios
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ServiceCatalog",
+    "name": "Servicios Profesionales - Transaesthetic",
+    "description": pageDescription,
+    "provider": {
+      "@type": "Organization",
+      "name": "Transaesthetic Solutions"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Servicios Profesionales",
+      "itemListElement": filteredServices.map(service => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.name,
+          "description": service.description,
+          "serviceType": service.category,
+          "offers": {
+            "@type": "Offer",
+            "price": service.price,
+            "priceCurrency": service.currency,
+            "availability": "https://schema.org/InStock"
+          }
+        }
+      }))
+    }
+  })} />
+</Layout>

@@ -1,0 +1,122 @@
+---
+// Footer Component - Site footer with links and information
+import Icon from '../atoms/Icon.astro';
+import { companyInfo, companyStats, companyValues } from '../../data/company';
+---
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white">
+  <div class="container mx-auto px-4 py-12">
+    <!-- Main Footer Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Company Info -->
+      <div class="space-y-4">
+        <div class="flex items-center space-x-2">
+          <img src="/crown.svg" alt="Logo" class="h-8 w-8" />
+          <span class="text-xl font-bold">{companyInfo.name}</span>
+        </div>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          {companyInfo.description}
+        </p>
+        <div class="flex space-x-4">
+          <a href={companyInfo.social.linkedin} class="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" aria-label="LinkedIn">
+              <Icon name="linkedin" size={20} />
+            </a>
+            <a href={companyInfo.social.twitter} class="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" aria-label="Twitter">
+              <Icon name="twitter" size={20} />
+            </a>
+            <a href={companyInfo.social.instagram} class="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" aria-label="Instagram">
+              <Icon name="instagram" size={20} />
+            </a>
+            <a href={companyInfo.social.facebook} class="text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded" aria-label="Facebook">
+              <Icon name="facebook" size={20} />
+            </a>
+        </div>
+      </div>
+
+      <!-- Services -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Servicios</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/servicios?category=consultoria" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Consultoría Estratégica</a></li>
+          <li><a href="/servicios?category=desarrollo" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Desarrollo Web</a></li>
+          <li><a href="/servicios?category=diseno" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Diseño UI/UX</a></li>
+          <li><a href="/servicios?category=marketing" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Marketing Digital</a></li>
+          <li><a href="/servicios" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Ver Todos</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Empresa</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/acerca-de" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Acerca de Nosotros</a></li>
+          <li><a href="/testimonios" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Testimonios</a></li>
+          <li><a href="/precios" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Precios</a></li>
+          <li><a href="/contacto" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Contacto</a></li>
+          <li><a href="/acerca-de#equipo" class="text-gray-300 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Nuestro Equipo</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Contacto</h3>
+        <div class="space-y-2 text-sm text-gray-300">
+          <div class="flex items-center space-x-2">
+            <Icon name="map-pin" size={16} />
+            <span>{companyInfo.location}</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <Icon name="mail" size={16} />
+            <a href={`mailto:${companyInfo.email}`} class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+              {companyInfo.email}
+            </a>
+          </div>
+          <div class="flex items-center space-x-2">
+            <Icon name="phone" size={16} />
+            <a href={`tel:${companyInfo.phone}`} class="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+              {companyInfo.phone}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="mt-12 pt-8 border-t border-gray-800">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-2xl font-bold text-blue-400">{companyStats.clients}+</div>
+          <div class="text-sm text-gray-400">Clientes Satisfechos</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-blue-400">{companyStats.projects}+</div>
+          <div class="text-sm text-gray-400">Proyectos Completados</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-blue-400">{companyStats.experience}+</div>
+          <div class="text-sm text-gray-400">Años de Experiencia</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold text-blue-400">{companyStats.satisfaction}%</div>
+          <div class="text-sm text-gray-400">Satisfacción</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+      <div class="text-sm text-gray-400">
+        © {new Date().getFullYear()} {companyInfo.name}. Todos los derechos reservados.
+      </div>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="/privacidad" class="text-sm text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+          Política de Privacidad
+        </a>
+        <a href="/terminos" class="text-sm text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">
+          Términos de Servicio
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

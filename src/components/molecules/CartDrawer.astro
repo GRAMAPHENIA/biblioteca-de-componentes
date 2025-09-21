@@ -1,0 +1,288 @@
+---
+// Cart Drawer Component - Visual cart interface
+---
+
+<!-- Cart Drawer -->
+<div id="cart-drawer" class="fixed inset-0 z-50 hidden" aria-hidden="true">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity" id="cart-backdrop"></div>
+
+  <!-- Drawer -->
+  <div class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform duration-300 ease-in-out" id="cart-drawer-content">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b">
+      <h2 class="text-lg font-semibold text-gray-900">Carrito de Compras</h2>
+      <button
+        id="close-cart"
+        class="text-gray-400 hover:text-gray-600 transition-colors"
+        aria-label="Cerrar carrito"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Cart Items -->
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4">
+      <div id="empty-cart" class="text-center py-8">
+        <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5h13M12 18a2 2 0 100 4 2 2 0 000-4zm6 0a2 2 0 100 4 2 2 0 000-4z"></path>
+        </svg>
+        <p class="text-gray-500">Tu carrito está vacío</p>
+        <a href="/servicios" class="text-blue-600 hover:text-blue-800 mt-2 inline-block">
+          Continuar comprando
+        </a>
+      </div>
+
+      <div id="cart-items-list" class="hidden space-y-4">
+        <!-- Items will be populated by JavaScript -->
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="cart-footer" class="border-t p-4 hidden">
+      <div class="space-y-3">
+        <div class="flex justify-between text-sm text-gray-600">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">$0.00</span>
+        </div>
+        <div class="flex justify-between text-lg font-semibold text-gray-900">
+          <span>Total</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+        <button
+          id="checkout-btn"
+          class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+        >
+          Proceder al Checkout
+        </button>
+        <button
+          id="clear-cart-btn"
+          class="w-full text-gray-500 py-2 px-4 text-sm hover:text-gray-700 transition-colors"
+        >
+          Vaciar carrito
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Button (floating) -->
+<button
+  id="cart-toggle"
+  class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors z-40"
+  aria-label="Abrir carrito"
+>
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5h13M12 18a2 2 0 100 4 2 2 0 000-4zm6 0a2 2 0 100 4 2 2 0 000-4z"></path>
+  </svg>
+  <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center hidden">
+    0
+  </span>
+</button>
+
+<script>
+  // Cart Drawer functionality
+  const cartDrawer = document.getElementById('cart-drawer');
+  const cartBackdrop = document.getElementById('cart-backdrop');
+  const cartDrawerContent = document.getElementById('cart-drawer-content');
+  const cartToggle = document.getElementById('cart-toggle');
+  const closeCart = document.getElementById('close-cart');
+  const cartItemsList = document.getElementById('cart-items-list');
+  const emptyCart = document.getElementById('empty-cart');
+  const cartFooter = document.getElementById('cart-footer');
+  const cartCount = document.getElementById('cart-count');
+  const cartSubtotal = document.getElementById('cart-subtotal');
+  const cartTotal = document.getElementById('cart-total');
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const clearCartBtn = document.getElementById('clear-cart-btn');
+
+  // Format currency
+  function formatCurrency(amount: number) {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+
+  // Create cart item element
+  function createCartItemElement(item: any) {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'flex items-center space-x-4 p-4 border rounded-lg';
+    itemElement.innerHTML = `
+      <div class="flex-shrink-0 w-16 h-16 bg-gray-200 rounded-lg overflow-hidden">
+        <img src="${item.imageUrl || '/placeholder-service.jpg'}" alt="${item.name}" class="w-full h-full object-cover">
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 class="text-sm font-medium text-gray-900 truncate">${item.name}</h3>
+        <p class="text-sm text-gray-500">${formatCurrency(item.price)}</p>
+        <div class="flex items-center mt-2">
+          <button class="quantity-btn text-gray-400 hover:text-gray-600" data-action="decrease" data-id="${item.id}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+            </svg>
+          </button>
+          <span class="quantity mx-3 text-sm font-medium">${item.quantity}</span>
+          <button class="quantity-btn text-gray-400 hover:text-gray-600" data-action="increase" data-id="${item.id}">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button class="remove-btn text-gray-400 hover:text-red-600 transition-colors" data-id="${item.id}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+      </button>
+    `;
+    return itemElement;
+  }
+
+  // Update cart display
+  function updateCartDisplay() {
+    const cartState = window.getCartState();
+    const items = cartState.items;
+    const total = cartState.total;
+    const totalItems = cartState.totalItems;
+
+    // Update count badge
+    if (cartCount && totalItems > 0) {
+      cartCount.textContent = totalItems;
+      cartCount.classList.remove('hidden');
+    } else if (cartCount) {
+      cartCount.classList.add('hidden');
+    }
+
+    // Update items list
+    if (cartItemsList) {
+      cartItemsList.innerHTML = '';
+
+      if (items.length === 0) {
+        if (emptyCart) emptyCart.classList.remove('hidden');
+        if (cartItemsList) cartItemsList.classList.add('hidden');
+        if (cartFooter) cartFooter.classList.add('hidden');
+      } else {
+        if (emptyCart) emptyCart.classList.add('hidden');
+        if (cartItemsList) cartItemsList.classList.remove('hidden');
+        if (cartFooter) cartFooter.classList.remove('hidden');
+
+        items.forEach((item: any) => {
+          const itemElement = createCartItemElement(item);
+          if (cartItemsList) cartItemsList.appendChild(itemElement);
+        });
+
+        // Update totals
+        if (cartSubtotal) cartSubtotal.textContent = formatCurrency(total);
+        if (cartTotal) cartTotal.textContent = formatCurrency(total);
+      }
+    }
+  }
+
+  // Open cart drawer
+  function openCartDrawer() {
+    if (cartDrawer) {
+      cartDrawer.classList.remove('hidden');
+      cartDrawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  // Close cart drawer
+  function closeCartDrawer() {
+    if (cartDrawer) {
+      cartDrawer.classList.add('hidden');
+      cartDrawer.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Event listeners
+  if (cartToggle) {
+    cartToggle.addEventListener('click', () => {
+      window.openCart();
+      openCartDrawer();
+    });
+  }
+
+  if (closeCart) {
+    closeCart.addEventListener('click', () => {
+      window.closeCart();
+      closeCartDrawer();
+    });
+  }
+
+  if (cartBackdrop) {
+    cartBackdrop.addEventListener('click', () => {
+      window.closeCart();
+      closeCartDrawer();
+    });
+  }
+
+  // Listen for cart updates
+  window.addEventListener('cartUpdated', updateCartDisplay);
+  window.addEventListener('cartDisplayUpdated', updateCartDisplay);
+
+  // Initialize
+  updateCartDisplay();
+
+  // Handle quantity changes
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.quantity-btn')) {
+      const btn = target.closest('.quantity-btn') as HTMLElement;
+      const action = btn.dataset.action;
+      const id = btn.dataset.id;
+
+      const cartState = window.getCartState();
+      const item = cartState.items.find((item: any) => item.id === id);
+
+      if (item) {
+        let newQuantity = item.quantity;
+        if (action === 'increase') {
+          newQuantity++;
+        } else if (action === 'decrease') {
+          newQuantity--;
+        }
+
+        window.updateCartQuantity(id, newQuantity);
+      }
+    }
+
+    if (target.closest('.remove-btn')) {
+      const btn = target.closest('.remove-btn') as HTMLElement;
+      const id = btn.dataset.id;
+      window.removeFromCart(id);
+    }
+  });
+
+  // Clear cart
+  if (clearCartBtn) {
+    clearCartBtn.addEventListener('click', () => {
+      if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+        window.clearCart();
+      }
+    });
+  }
+
+  // Checkout
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', () => {
+      window.location.href = '/contacto?checkout=true';
+    });
+  }
+
+  // Listen for cart toggle events
+  window.addEventListener('cartToggled', (e) => {
+    const event = e as any;
+    if (event.detail && event.detail.isOpen) {
+      openCartDrawer();
+    } else {
+      closeCartDrawer();
+    }
+  });
+
+  // Initialize
+  updateCartDisplay();
+</script>

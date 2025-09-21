@@ -1,6 +1,11 @@
 ---
 import "../styles/global.css";
+import Header from "../components/common/Header.astro";
+import Footer from "../components/common/Footer.astro";
+import CartContext from "../components/molecules/CartContext.astro";
+import CartDrawer from "../components/molecules/CartDrawer.astro";
 ---
+
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
@@ -9,8 +14,15 @@ import "../styles/global.css";
 		<meta name="generator" content={Astro.generator} />
 		<title>Transaesthetic Dashboard</title>
 	</head>
-	<body>
-		<slot />
+	<body class="min-h-screen flex flex-col">
+		<CartContext>
+			<Header />
+			<main class="flex-1">
+				<slot />
+			</main>
+			<Footer />
+			<CartDrawer />
+		</CartContext>
 
 		<script>
 			// Registro del Service Worker

@@ -1,0 +1,292 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/common/Section.astro';
+import Button from '../components/atoms/Button.astro';
+import Icon from '../components/atoms/Icon.astro';
+import { companyInfo, companyStats, companyValues, teamMembers, getYearsOfExperience } from '../data/company';
+import { getFeaturedTestimonials } from '../data/testimonials';
+
+// Meta tags para SEO
+const pageTitle = 'Acerca de Transaesthetic - Nuestra Historia y Equipo';
+const pageDescription = 'Conoce la historia de Transaesthetic Solutions, nuestro equipo de expertos y los valores que nos impulsan a crear soluciones digitales excepcionales.';
+---
+
+<Layout>
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="acerca de, historia, equipo, valores, empresa, transaesthetic, soluciones digitales" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="canonical" href={`${Astro.site}acerca-de`} />
+  </head>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-gray-50 to-blue-50 py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Acerca de <span class="text-blue-600">Transaesthetic</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
+        {companyInfo.tagline}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button
+          variant="primary"
+          href="/servicios"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="arrow-right" size={16} />
+          Nuestros Servicios
+        </Button>
+        <Button
+          variant="ghost"
+          href="/contacto"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="message-circle" size={16} />
+          Contactar Equipo
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Company Story -->
+  <Section className="py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          Nuestra Historia
+        </h2>
+        <div class="space-y-4 text-gray-600 leading-relaxed">
+          <p>
+            Fundada en {companyInfo.founded}, Transaesthetic Solutions nació con la visión de
+            transformar la manera en que las empresas abordan la tecnología y la innovación digital.
+          </p>
+          <p>
+            {companyInfo.description}
+          </p>
+          <p>
+            Hoy, con {getYearsOfExperience()} años de experiencia y más de {companyStats.clients}+
+            clientes satisfechos, continuamos liderando la transformación digital en Argentina y Latinoamérica.
+          </p>
+        </div>
+      </div>
+      <div class="bg-white p-8 rounded-2xl shadow-lg">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Nuestros Números</h3>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-blue-600 mb-2">{companyStats.clients}+</div>
+            <div class="text-gray-600">Clientes Satisfechos</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-blue-600 mb-2">{companyStats.projects}+</div>
+            <div class="text-gray-600">Proyectos Completados</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-blue-600 mb-2">{companyStats.experience}+</div>
+            <div class="text-gray-600">Años de Experiencia</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-blue-600 mb-2">{companyStats.satisfaction}%</div>
+            <div class="text-gray-600">Satisfacción Cliente</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Values Section -->
+  <Section className="bg-gray-50 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Nuestros Valores
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Los principios que guían cada proyecto y decisión que tomamos
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {companyValues.map(value => (
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <Icon name={value.icon} size={24} class="text-blue-600" />
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-3">
+            {value.title}
+          </h3>
+          <p class="text-gray-600 leading-relaxed">
+            {value.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Team Section -->
+  <Section className="py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Nuestro Equipo
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Conoce a los expertos que hacen posible nuestra visión
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {teamMembers.map(member => (
+        <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+          <div class="aspect-square bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">
+            <Icon name="user" size={48} class="text-blue-600" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-1">
+              {member.name}
+            </h3>
+            <p class="text-blue-600 font-medium mb-3">
+              {member.position}
+            </p>
+            <p class="text-gray-600 text-sm leading-relaxed mb-4">
+              {member.bio}
+            </p>
+            <div class="flex gap-2">
+              {member.social.linkedin && (
+                <a
+                  href={member.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-400 hover:text-blue-600 transition-colors"
+                  aria-label={`LinkedIn de ${member.name}`}
+                >
+                  <Icon name="linkedin" size={20} />
+                </a>
+              )}
+              {member.social.twitter && (
+                <a
+                  href={member.social.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-gray-400 hover:text-blue-600 transition-colors"
+                  aria-label={`Twitter de ${member.name}`}
+                >
+                  <Icon name="twitter" size={20} />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Testimonials Preview -->
+  <Section className="bg-blue-600 text-white py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Lo que dicen nuestros clientes
+      </h2>
+      <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+        El éxito de nuestros clientes es nuestro mayor logro
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+      {getFeaturedTestimonials(3).map(testimonial => (
+        <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+          <div class="flex items-center mb-4">
+            {[...Array(5)].map((_, i) => (
+              <Icon
+                name="star"
+                size={16}
+                class={`${
+                  i < testimonial.rating ? 'text-yellow-400' : 'text-gray-400'
+                }`}
+              />
+            ))}
+          </div>
+          <p class="text-blue-100 mb-4 italic">
+            "{testimonial.content.substring(0, 120)}..."
+          </p>
+          <div>
+            <div class="font-semibold text-white">
+              {testimonial.clientName}
+            </div>
+            <div class="text-blue-200 text-sm">
+              {testimonial.clientCompany}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center">
+      <Button
+        variant="ghost"
+        href="/testimonios"
+        className="inline-flex items-center gap-2 text-white border-white hover:bg-white hover:text-blue-600"
+      >
+        <Icon name="arrow-right" size={16} />
+        Ver todos los testimonios
+      </Button>
+    </div>
+  </Section>
+
+  <!-- CTA Section -->
+  <Section className="py-16">
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        ¿Listo para trabajar con nosotros?
+      </h2>
+      <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        Únete a nuestros más de {companyStats.clients} clientes satisfechos y transforma tu negocio con nuestras soluciones.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button
+          variant="primary"
+          href="/contacto"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="calendar" size={16} />
+          Agendar Consulta Gratuita
+        </Button>
+        <Button
+          variant="ghost"
+          href="/servicios"
+          className="inline-flex items-center gap-2"
+        >
+          <Icon name="info" size={16} />
+          Explorar Servicios
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": pageTitle,
+    "description": pageDescription,
+    "mainEntity": {
+      "@type": "Organization",
+      "name": companyInfo.name,
+      "foundingDate": companyInfo.founded,
+      "description": companyInfo.description,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": companyInfo.location
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": companyInfo.phone,
+        "email": companyInfo.email
+      }
+    }
+  })} />
+</Layout>

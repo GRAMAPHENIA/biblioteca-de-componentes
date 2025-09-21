@@ -4,12 +4,13 @@ import Icon from "../atoms/Icon.astro";
 import Button from "../atoms/Button.astro";
 
 export interface Props {
-  product: Product;
-  onAddToCartUrl?: string; // opcional: navegación a acción
-  ctaLabel?: string;
+product: Product;
+onAddToCartUrl?: string; // opcional: navegación a acción
+ctaLabel?: string;
+showAddToCart?: boolean; // mostrar botón de agregar al carrito
 }
 
-const { product, onAddToCartUrl, ctaLabel = "Agregar" } = Astro.props;
+const { product, onAddToCartUrl, ctaLabel = "Agregar", showAddToCart = true } = Astro.props;
 
 const currency = product.currency ?? "USD";
 
@@ -51,16 +52,65 @@ const priceFormatter = new Intl.NumberFormat("en-US", {
         {priceFormatter.format(product.price)}
       </span>
 
-      <Button
-        variant="ghost"
-        size="sm"
-        href={onAddToCartUrl}
-        ariaLabel={`Agregar ${product.name} al carrito`}
-        class="gap-1"
-      >
-        <Icon name="cart" size={14} class="opacity-80" />
-        <span>{ctaLabel}</span>
-      </Button>
+      {showAddToCart ? (
+        <button
+          class="add-to-cart-btn inline-flex items-center gap-1 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          data-product-id={product.id}
+          data-product-name={product.name}
+          data-product-price={product.price}
+          data-product-currency={product.currency || 'USD'}
+          data-product-image={product.imageUrl}
+          aria-label={`Agregar ${product.name} al carrito`}
+        >
+          <Icon name="cart" size={14} class="opacity-80" />
+          <span>{ctaLabel}</span>
+        </button>
+      ) : (
+        <Button
+          variant="ghost"
+          size="sm"
+          href={onAddToCartUrl}
+          ariaLabel={`Agregar ${product.name} al carrito`}
+          class="gap-1"
+        >
+          <Icon name="cart" size={14} class="opacity-80" />
+          <span>{ctaLabel}</span>
+        </Button>
+      )}
     </div>
   </div>
+
+  <!-- Add to cart functionality -->
+  <script>
+    // Handle add to cart button click
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const btn = target.closest('.add-to-cart-btn') as HTMLElement;
+      if (btn) {
+        e.preventDefault();
+
+        const productData = {
+          id: btn.dataset.productId,
+          name: btn.dataset.productName,
+          price: parseFloat(btn.dataset.productPrice || '0'),
+          currency: btn.dataset.productCurrency,
+          imageUrl: btn.dataset.productImage,
+          quantity: 1
+        };
+
+        // Add to cart
+        (window as any).addToCart(productData);
+
+        // Show feedback
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Agregado!';
+        btn.classList.add('bg-green-600', 'hover:bg-green-700');
+
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        }, 2000);
+      }
+    });
+  </script>
 </article>

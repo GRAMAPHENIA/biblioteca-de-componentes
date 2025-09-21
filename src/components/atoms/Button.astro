@@ -11,6 +11,7 @@ export interface Props {
   disabled?: boolean;
   class?: string;
   ariaLabel?: string;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const {
@@ -22,7 +23,8 @@ const {
   size = 'md',
   disabled = false,
   class: className = '',
-  ariaLabel
+  ariaLabel,
+  type = 'button'
 } = Astro.props;
 
 const base =
@@ -58,7 +60,7 @@ const cls = `${base} ${sizeMap[size]} ${variantMap[variant]} ${disabled ? 'opaci
   </a>
 ) : (
   <button
-    type="button"
+    type={type}
     aria-label={ariaLabel ?? label}
     class={cls}
     disabled={disabled}

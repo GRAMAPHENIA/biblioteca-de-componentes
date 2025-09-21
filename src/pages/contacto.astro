@@ -1,0 +1,513 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/common/Section.astro';
+import Button from '../components/atoms/Button.astro';
+import Icon from '../components/atoms/Icon.astro';
+import { companyInfo } from '../data/company';
+
+// Meta tags para SEO
+const pageTitle = 'Contacto - Transaesthetic Dashboard';
+const pageDescription = 'Ponte en contacto con nuestro equipo de expertos. Solicita una consulta gratuita y descubre cómo podemos ayudarte a alcanzar tus objetivos digitales.';
+---
+
+<Layout>
+  <head>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="contacto, consulta, soporte, transaesthetic, servicios digitales, presupuesto" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <link rel="canonical" href={`${Astro.site}contacto`} />
+  </head>
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-blue-50 to-indigo-100 py-16 md:py-24">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Hablemos de tu <span class="text-blue-600">Proyecto</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        ¿Tienes una idea innovadora? ¿Necesitas optimizar tu presencia digital?
+        Nuestro equipo está listo para ayudarte a alcanzar tus objetivos.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4 text-left">
+          <div class="flex items-center gap-3">
+            <Icon name="message-circle" size={24} class="text-blue-600" />
+            <div>
+              <div class="font-semibold text-gray-900">Consulta Gratuita</div>
+              <div class="text-sm text-gray-600">30 minutos sin compromiso</div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4 text-left">
+          <div class="flex items-center gap-3">
+            <Icon name="clock" size={24} class="text-blue-600" />
+            <div>
+              <div class="font-semibold text-gray-900">Respuesta Rápida</div>
+              <div class="text-sm text-gray-600">Respondemos en 24 horas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form and Info -->
+  <Section className="py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Contact Form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6">
+            Envíanos un Mensaje
+          </h2>
+
+          <form
+            id="contact-form"
+            class="space-y-6"
+            action="/api/contact"
+            method="POST"
+            novalidate
+          >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre *
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Tu nombre"
+                  aria-describedby="firstName-error"
+                />
+                <div id="firstName-error" class="mt-1 text-sm text-red-600 hidden">
+                  El nombre es requerido
+                </div>
+              </div>
+
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">
+                  Apellido *
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Tu apellido"
+                  aria-describedby="lastName-error"
+                />
+                <div id="lastName-error" class="mt-1 text-sm text-red-600 hidden">
+                  El apellido es requerido
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="tu.email@ejemplo.com"
+                aria-describedby="email-error"
+              />
+              <div id="email-error" class="mt-1 text-sm text-red-600 hidden">
+                Por favor ingresa un email válido
+              </div>
+            </div>
+
+            <div>
+              <label for="company" class="block text-sm font-medium text-gray-700 mb-2">
+                Empresa
+              </label>
+              <input
+                type="text"
+                id="company"
+                name="company"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="Nombre de tu empresa (opcional)"
+              />
+            </div>
+
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                Teléfono
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                placeholder="+54 11 5555-0123"
+              />
+            </div>
+
+            <div>
+              <label for="service" class="block text-sm font-medium text-gray-700 mb-2">
+                Servicio de Interés
+              </label>
+              <select
+                id="service"
+                name="service"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              >
+                <option value="">Selecciona un servicio</option>
+                <option value="consultoria-estrategica">Consultoría Estratégica Premium</option>
+                <option value="desarrollo-web-fullstack">Desarrollo Web Full-Stack</option>
+                <option value="branding-corporativo">Branding Corporativo Completo</option>
+                <option value="marketing-digital-360">Marketing Digital 360°</option>
+                <option value="auditoria-seguridad">Auditoría de Seguridad TI</option>
+                <option value="ui-ux-design-system">Sistema de Diseño UI/UX</option>
+                <option value="otro">Otro / No estoy seguro</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="budget" class="block text-sm font-medium text-gray-700 mb-2">
+                Presupuesto Estimado
+              </label>
+              <select
+                id="budget"
+                name="budget"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              >
+                <option value="">Selecciona un rango</option>
+                <option value="menos-1000">Menos de $1,000 USD</option>
+                <option value="1000-5000">$1,000 - $5,000 USD</option>
+                <option value="5000-10000">$5,000 - $10,000 USD</option>
+                <option value="10000-25000">$10,000 - $25,000 USD</option>
+                <option value="25000-50000">$25,000 - $50,000 USD</option>
+                <option value="mas-50000">Más de $50,000 USD</option>
+                <option value="por-definir">Por definir</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                Mensaje *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="6"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-vertical"
+                placeholder="Cuéntanos sobre tu proyecto, objetivos, timeline y cualquier pregunta específica..."
+                aria-describedby="message-error"
+              ></textarea>
+              <div id="message-error" class="mt-1 text-sm text-red-600 hidden">
+                El mensaje es requerido
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="privacy"
+                name="privacy"
+                required
+                class="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label for="privacy" class="text-sm text-gray-600">
+                Acepto la{' '}
+                <a href="/privacidad" class="text-blue-600 hover:underline">
+                  Política de Privacidad
+                </a>{' '}
+                y recibir comunicaciones sobre servicios relacionados. *
+              </label>
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full justify-center py-3 text-base"
+            >
+              <Icon name="send" size={16} />
+              Enviar Mensaje
+            </Button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="space-y-8">
+        <!-- Contact Details -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">
+            Información de Contacto
+          </h3>
+
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <Icon name="map-pin" size={20} class="text-blue-600 mt-1 flex-shrink-0" />
+              <div>
+                <div class="font-medium text-gray-900">Ubicación</div>
+                <div class="text-gray-600">{companyInfo.location}</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <Icon name="mail" size={20} class="text-blue-600 mt-1 flex-shrink-0" />
+              <div>
+                <div class="font-medium text-gray-900">Email</div>
+                <a
+                  href={`mailto:${companyInfo.email}`}
+                  class="text-blue-600 hover:underline"
+                >
+                  {companyInfo.email}
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <Icon name="phone" size={20} class="text-blue-600 mt-1 flex-shrink-0" />
+              <div>
+                <div class="font-medium text-gray-900">Teléfono</div>
+                <a
+                  href={`tel:${companyInfo.phone}`}
+                  class="text-blue-600 hover:underline"
+                >
+                  {companyInfo.phone}
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <Icon name="globe" size={20} class="text-blue-600 mt-1 flex-shrink-0" />
+              <div>
+                <div class="font-medium text-gray-900">Sitio Web</div>
+                <a
+                  href={companyInfo.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 hover:underline"
+                >
+                  {companyInfo.website}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Hours -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">
+            Horarios de Atención
+          </h3>
+
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Lunes - Viernes</span>
+              <span class="font-medium text-gray-900">9:00 - 18:00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Sábado</span>
+              <span class="font-medium text-gray-900">10:00 - 14:00</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Domingo</span>
+              <span class="font-medium text-red-600">Cerrado</span>
+            </div>
+          </div>
+
+          <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-800">
+              <Icon name="info" size={16} class="inline mr-1" />
+              Para consultas urgentes fuera del horario, escríbenos y te responderemos a la brevedad.
+            </p>
+          </div>
+        </div>
+
+        <!-- Social Media -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">
+            Síguenos en Redes
+          </h3>
+
+          <div class="flex gap-3">
+            <a
+              href={companyInfo.social.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Icon name="linkedin" size={20} />
+            </a>
+            <a
+              href={companyInfo.social.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-400 text-white rounded-lg flex items-center justify-center hover:bg-blue-500 transition-colors"
+              aria-label="Twitter"
+            >
+              <Icon name="twitter" size={20} />
+            </a>
+            <a
+              href={companyInfo.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg flex items-center justify-center hover:from-purple-600 hover:to-pink-600 transition-colors"
+              aria-label="Instagram"
+            >
+              <Icon name="instagram" size={20} />
+            </a>
+            <a
+              href={companyInfo.social.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-10 h-10 bg-blue-700 text-white rounded-lg flex items-center justify-center hover:bg-blue-800 transition-colors"
+              aria-label="Facebook"
+            >
+              <Icon name="facebook" size={20} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- FAQ Section -->
+  <Section className="bg-gray-50 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Preguntas Frecuentes
+      </h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Respuestas a las preguntas más comunes sobre nuestros servicios
+      </p>
+    </div>
+
+    <div class="max-w-4xl mx-auto space-y-6">
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Ofrecen consultas gratuitas?
+        </h3>
+        <p class="text-gray-600">
+          Sí, ofrecemos consultas iniciales de 30 minutos completamente gratuitas para entender tu proyecto y brindarte recomendaciones personalizadas.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Cuánto tiempo toma completar un proyecto?
+        </h3>
+        <p class="text-gray-600">
+          El tiempo varía según la complejidad del proyecto. Un sitio web básico puede tomar 2-4 semanas, mientras que proyectos más complejos pueden tomar 2-3 meses.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Ofrecen mantenimiento después del lanzamiento?
+        </h3>
+        <p class="text-gray-600">
+          Sí, incluimos períodos de mantenimiento y soporte técnico en todos nuestros proyectos. También ofrecemos planes de mantenimiento continuo opcionales.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          ¿Trabajan con clientes internacionales?
+        </h3>
+        <p class="text-gray-600">
+          Absolutamente. Tenemos experiencia trabajando con clientes de todo el mundo y nos adaptamos a diferentes zonas horarias para reuniones efectivas.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": pageTitle,
+    "description": pageDescription,
+    "mainEntity": {
+      "@type": "Organization",
+      "name": companyInfo.name,
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": companyInfo.phone,
+        "email": companyInfo.email,
+        "contactType": "customer service",
+        "availableLanguage": "Spanish"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": companyInfo.location
+      }
+    }
+  })} />
+
+  <!-- Contact Form Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('contact-form');
+
+      form?.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Basic validation
+        const firstName = document.getElementById('firstName') as HTMLInputElement;
+        const lastName = document.getElementById('lastName') as HTMLInputElement;
+        const email = document.getElementById('email') as HTMLInputElement;
+        const message = document.getElementById('message') as HTMLTextAreaElement;
+        const privacy = document.getElementById('privacy') as HTMLInputElement;
+
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('[id$="-error"]').forEach(el => {
+          el.classList.add('hidden');
+        });
+
+        // Validate required fields
+        if (!firstName.value.trim()) {
+          document.getElementById('firstName-error')?.classList.remove('hidden');
+          isValid = false;
+        }
+
+        if (!lastName.value.trim()) {
+          document.getElementById('lastName-error')?.classList.remove('hidden');
+          isValid = false;
+        }
+
+        if (!email.value.trim() || !email.validity.valid) {
+          document.getElementById('email-error')?.classList.remove('hidden');
+          isValid = false;
+        }
+
+        if (!message.value.trim()) {
+          document.getElementById('message-error')?.classList.remove('hidden');
+          isValid = false;
+        }
+
+        if (!privacy.checked) {
+          alert('Debes aceptar la Política de Privacidad para continuar.');
+          isValid = false;
+        }
+
+        if (isValid) {
+          // Show success message (in a real app, this would submit to a backend)
+          alert('¡Gracias por tu mensaje! Te contactaremos en las próximas 24 horas.');
+          form.reset();
+        }
+      });
+    });
+  </script>
+</Layout>
