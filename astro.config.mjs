@@ -12,4 +12,13 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+
+  // Headers de seguridad para Service Worker
+  server: {
+    headers: {
+      'Service-Worker-Allowed': '/',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+    }
+  }
 });

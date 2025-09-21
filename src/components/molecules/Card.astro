@@ -1,0 +1,55 @@
+---
+export interface CardProps {
+  title: string;
+  description: string;
+  tags?: string[];
+  price: string;
+  duration: string;
+  icon?: string;
+}
+const { title, description, tags = [], price, duration, icon } = Astro.props as CardProps;
+---
+
+<div
+  class="bg-neutral-100 border border-neutral-200 rounded-2xl p-6 md:p-8 hover:shadow-lg hover:border-ochre-300 transition-all duration-300 group"
+>
+  <div
+    class="w-16 h-16 bg-black/10 rounded-xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-ochre-200"
+  >
+    {icon && (
+      <img src={icon} alt="Icono" class="w-8 h-8" />
+    )}
+    <slot name="icon" />
+  </div>
+  <div class="space-y-4">
+    <h3
+      class="text-xl md:text-2xl font-bold text-neutral-800 group-hover:text-ochre-700 transition-colors"
+    >
+      {title}
+    </h3>
+    <p class="text-neutral-600 leading-relaxed">{description}</p>
+    {
+      tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag) => (
+            <span class="px-3 py-1 bg-black/5 text-neutral-600 text-xs font-thin rounded-full">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )
+    }
+    <div
+      class="flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 mt-6 border-t border-neutral-200 gap-2"
+    >
+      <span>
+         <span class="text-sm font-medium text-neutral-700">Precio:</span>
+        <span class="text-sm text-neutral-700 ml-1">{price}</span>
+      </span>
+      <span>
+        <span class="text-sm font-medium text-neutral-700">Tiempo:</span>
+        <span class="text-sm text-neutral-700 ml-1">{duration}</span>
+      </span>
+    </div>
+  </div>
+</div>

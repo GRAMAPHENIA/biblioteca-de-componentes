@@ -11,5 +11,33 @@ import "../styles/global.css";
 	</head>
 	<body>
 		<slot />
+
+		<script>
+			// Registro del Service Worker
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('/sw.js')
+						.then((registration) => {
+							console.log('Service Worker registrado exitosamente:', registration.scope);
+
+							// Verificar actualizaciones del service worker
+							registration.addEventListener('updatefound', () => {
+								const newWorker = registration.installing;
+								if (newWorker) {
+									newWorker.addEventListener('statechange', () => {
+										if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+											// Hay una nueva versión disponible
+											console.log('Nueva versión del Service Worker disponible');
+										}
+									});
+								}
+							});
+						})
+						.catch((error) => {
+							console.log('Error al registrar el Service Worker:', error);
+						});
+				});
+			}
+		</script>
 	</body>
 </html>

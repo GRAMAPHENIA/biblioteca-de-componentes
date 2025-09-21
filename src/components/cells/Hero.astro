@@ -1,0 +1,76 @@
+---
+// Hero.astro
+export interface HeroProps {
+  // 📌 Contenido principal
+  title: string;
+  subtitle?: string;
+  tagline?: string;
+
+  // 📌 Llamados a la acción
+  ctaPrimary?: string;
+  ctaPrimaryHref?: string;
+  ctaSecondary?: string;
+  ctaSecondaryHref?: string;
+
+  // 📌 Visuales
+  imageSrc?: string;
+  imageAlt?: string;
+  background?: string;
+
+  // 📌 Configuración
+  align?: "left" | "center" | "right";
+  showSocialProof?: boolean;
+  className?: string;
+}
+const {
+  title,
+  subtitle,
+  tagline,
+  ctaPrimary,
+  ctaPrimaryHref,
+  ctaSecondary,
+  ctaSecondaryHref,
+  background,
+  className,
+} = Astro.props as HeroProps;
+
+const bgImage = background || "/hero-placeholder.png";
+---
+
+<div
+  class={`w-full flex justify-center items-center py-16 px-4 h-[600px] ${className || ""}`}
+  style={`background: url('${bgImage}') center/cover no-repeat;`}
+>
+  <div class="text-center">
+    {
+      tagline && (
+        <div class="text-xs uppercase text-zinc-600 mb-2">{tagline}</div>
+      )
+    }
+    <h1 class="text-3xl font-bold mb-3">{title}</h1>
+    {subtitle && <p class="text-gray-600 mb-5">{subtitle}</p>}
+
+    <div class="flex gap-3 justify-center mb-2">
+      {
+        ctaPrimary && ctaPrimaryHref && (
+          <a
+            href={ctaPrimaryHref}
+            class="px-5 py-2 bg-zinc-600 text-white rounded-lg shadow hover:bg-zinc-700 transition"
+          >
+            {ctaPrimary}
+          </a>
+        )
+      }
+      {
+        ctaSecondary && ctaSecondaryHref && (
+          <a
+            href={ctaSecondaryHref}
+            class="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+          >
+            {ctaSecondary}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</div>

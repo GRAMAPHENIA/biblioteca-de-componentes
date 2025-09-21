@@ -1,20 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Card from "../components/molecules/Card.astro";
+import Hero from "../components/cells/Hero.astro";
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Transaesthetic Dashboard</title>
-  </head>
-  <body>
-    <Layout>
-      <h1 class="text-4xl text-center py-4">Componentes</h1>
-      
-
-    </Layout>
-  </body>
-</html>
+<Layout>
+  <h1 class="text-4xl text-center py-4">Componentes</h1>
+  <Hero
+    tagline="Lo que hacemos mejor"
+    title="Servicios"
+    subtitle="Explora nuestros servicios"
+    ctaPrimary="Comenzar"
+    ctaPrimaryHref="#"
+    ctaSecondary="Más información"
+    ctaSecondaryHref="#"
+  />
+  
+  <div class="py-12 md:py-16 px-4 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+      <Card
+        title="Servicio Premium"
+        description="Acceso prioritario, soporte dedicado y recursos exclusivos para potenciar tu experiencia."
+        tags={["Premium", "Soporte 24/7", "Recursos"]}
+        price="$49.99"
+        duration="1 hora"
+        icon="/crown.svg" 
+      />
+    </div>
+  </div>
+</Layout>
